@@ -50,7 +50,7 @@ const FormInputBarang = () => {
         setStock('')
         setLoading(false)
       } else {
-        swal("Gagal", "Terjadi Kesalahan, Coba beberpa saat lagi", "warning");
+        swal("Gagal", `Terjadi Kesalahan,  ${data.message}`, "warning");
         setLoading(false)
       }
 

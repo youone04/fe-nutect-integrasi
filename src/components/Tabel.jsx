@@ -4,20 +4,19 @@ import { Link } from 'react-router-dom';
 import swal from 'sweetalert';
 import ReactPaginate from 'react-paginate';
 
-const Tabel = ({ barang }) => {
+const Tabel = ({getData, barang , setOffset , offset , remountComponent, setRemountComponent}) => {
   // initial state pagination
-  const [offset, setOffset] = useState(0)
   const [dataPagination, setDataPagination] = useState([])
   const [perPage] = useState(3)
   const [pageCount, setPageCount] = useState(0)
-  const[loading , setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   //pagination function
-  const pagination = (id) => {
+  const pagination = () => {
     const slices = barang.slice(offset * perPage, offset * perPage + perPage);
-    // let i = offset * perPage + 1;
-    const dataHasilPagination = slices.filter(item => item.id != id).map((item, index) => (
+    let i = offset * perPage + 1;
+    const dataHasilPagination = slices.map((item, index) => (
       <tr key={index}>
-        <th className="text-center" scope="row">{index + 1}</th>
+        <th className="text-center" scope="row">{i++}</th>
         <td className="text-center" style={{ width: '20%' }}><img style={{ width: '100%' }} src={`${item.foto_barang}`} alt={item.nama_barang} /></td>
         <td className="text-center">{item.nama_barang}</td>
         <td className="text-center">{item.harga_jual}</td>
@@ -25,9 +24,9 @@ const Tabel = ({ barang }) => {
         <td className="text-center">{item.stok}</td>
         <td className="text-center">
           {
-            loading?
-            <button className='btn btn-sm btn-danger m-1' disabled>Loading...</button>:
-            <button onClick={() => actionDelete(item.id)} className='btn btn-sm btn-danger m-1'>delete</button>
+            loading ?
+              <button className='btn btn-sm btn-danger m-1' disabled>Loading...</button> :
+              <button onClick={() => actionDelete(item.id)} className='btn btn-sm btn-danger m-1'>delete</button>
           }
           <Link to={`/barang/${item.id}`}>
             <button className='btn btn-sm btn-success m-1'>update</button>
@@ -39,8 +38,9 @@ const Tabel = ({ barang }) => {
     setPageCount(Math.ceil(barang.length / perPage))
   }
   useEffect(() => {
-    pagination(null)
+    pagination()
   }, [offset, barang]);
+
   const actionDelete = (id) => {
     try {
       swal({
@@ -59,8 +59,11 @@ const Tabel = ({ barang }) => {
             const data = await hasil.json();
             if (data.status === 200) {
               swal("Berhasil", "Berhasil dihpuas", "success");
-              setLoading(false)
-              pagination(id)
+              setLoading(false);
+              setRemountComponent(Math.random());
+              setOffset(0)
+              // pagination(id)
+              getData()
             } else {
               swal("Gagal", `${data.message}`, "success");
               setLoading(false)
@@ -97,9 +100,9 @@ const Tabel = ({ barang }) => {
           {
             dataPagination
           }
-
         </tbody>
       </Table>
+      <div key={remountComponent}>
       <ReactPaginate
         previousLabel={"prev"}
         previousClassName={"page-item"}
@@ -119,6 +122,7 @@ const Tabel = ({ barang }) => {
         pageClassName={"page-item"}
         pageLinkClassName={"page-link"}
         activeClassName={"active"} />
+       </div>
     </>
   );
 };

@@ -4,19 +4,20 @@ import { Link } from 'react-router-dom';
 import { useState } from "react";
 import { useEffect } from "react";
 
-const DashboardComp = ({ barang }) => {
+const DashboardComp = ({ barang, getData }) => {
   const [textSearch, setTextSearch] = useState('');
-  const [dataSearch , setDataSearch] = useState([])
+  const [dataSearch , setDataSearch] = useState(barang)
+  const [offset, setOffset] = useState(0);
+  const [remountComponent, setRemountComponent] = useState(0);
 
   useEffect(() => {
     const hasil = barang?.filter(data =>
       data.nama_barang.toLowerCase().includes(textSearch.toLowerCase())
     );
     setDataSearch(hasil)
-
-  },[textSearch])
-
-  
+    setRemountComponent(Math.random());
+    setOffset(0)
+  },[textSearch,barang])
 
   return (
     <div className="col-sm-9">
@@ -30,7 +31,14 @@ const DashboardComp = ({ barang }) => {
               <Form.Control onChange={e => setTextSearch(e.target.value)} type="text" placeholder="Search" />
             </Form.Group>
           </div>
-          <Tabel barang={dataSearch} />
+          <Tabel 
+          getData={getData}
+          setDataSearch={setDataSearch}
+          remountComponent={remountComponent}
+          setRemountComponent={setRemountComponent}
+          setOffset={setOffset} 
+          offset={offset} 
+          barang={dataSearch} textSearch={textSearch} />
         </div>
       </div>
     </div>

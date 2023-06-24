@@ -22,7 +22,6 @@ const Home = () => {
     try {
       const data = await fetch(`${import.meta.env.VITE_ENDPOINT}/api/barang`);
       const result = await data.json();
-      console.log(result)
       if (result.status === 200) {
         setBarang({
           ...barang,
@@ -39,9 +38,10 @@ const Home = () => {
         })
       }
     } catch (e) {
+      
       setBarang({
         ...barang,
-        data: result,
+        data: [],
         loading: false,
         error: true,
       })
@@ -55,7 +55,6 @@ const Home = () => {
       </>
     )
   }
-  console.log(barang)
 
   return (
     <>
@@ -72,7 +71,7 @@ const Home = () => {
                 <div className="row content">
                   <Sidebar />
                   <br />
-                  <Dashboard barang={barang.data.barang} />
+                  <Dashboard barang={barang.data.barang} setBarang={setBarang} getData={getData} />
                 </div>
               </div>
               <Footer />
