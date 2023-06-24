@@ -15,7 +15,7 @@ const FormUpdateBarang = () => {
 
     useEffect(() => {
         getData()
-    }, []);
+    }, [viewGambar]);
 
     const getData = async () => {
         try {
@@ -45,8 +45,8 @@ const FormUpdateBarang = () => {
             .split(".")
             .pop()
             .toLowerCase();
-        if (typeof foto_barang === 'object' && extName !== "jpg" && extName !== "jpeg" && extName !== "png") {
-            swal("Gagal", "Extension file tidak di izinkan, pastikan extension JPG, JPEG atau PNG", "warning");
+        if (typeof foto_barang === 'object' && extName !== "jpg" && extName !== "png") {
+            swal("Gagal", "Extension file tidak di izinkan, pastikan extension JPG atau PNG", "warning");
             return;
         }
         const formData = new FormData();
@@ -72,7 +72,9 @@ const FormUpdateBarang = () => {
             const data = await hasil.json();
             if (data.status === 200) {
                 swal("Berhasil", "Data Berhasil diupdate", "success");
-                setLoading(false)
+                setLoading(false);
+                const objectUrl = URL.createObjectURL(foto_barang.target.files[0]);
+                setViewGambar(objectUrl);
             } else {
                 swal("Gagal", `Terjadi Kesalahan, ${data.message}`, "warning");
                 setLoading(false)

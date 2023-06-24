@@ -7,7 +7,8 @@ const FormInputBarang = () => {
   const [harga_jual, setSellingPrice] = useState('');
   const [harga_beli, setPurchasePrice] = useState('');
   const [stok, setStock] = useState('');
-  const[loading , setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [viewGambar, setViewGambar] = useState('https://t4.ftcdn.net/jpg/04/73/25/49/360_F_473254957_bxG9yf4ly7OBO5I0O5KABlN930GwaMQz.jpg');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -21,8 +22,8 @@ const FormInputBarang = () => {
       .split(".")
       .pop()
       .toLowerCase();
-    if (extName !== "jpg" && extName !== "jpeg" && extName !== "png") {
-      swal("Gagal", "Extension file tidak di izinkan, pastikan extension JPG, JPEG atau PNG", "warning");
+    if (extName !== "jpg" && extName && extName !== "png") {
+      swal("Gagal", "Extension file tidak di izinkan, pastikan extension JPG atau PNG", "warning");
       return;
     }
 
@@ -48,6 +49,7 @@ const FormInputBarang = () => {
         setPurchasePrice('')
         setSellingPrice('')
         setStock('')
+        setViewGambar('https://t4.ftcdn.net/jpg/04/73/25/49/360_F_473254957_bxG9yf4ly7OBO5I0O5KABlN930GwaMQz.jpg')
         setLoading(false)
       } else {
         swal("Gagal", `Terjadi Kesalahan,  ${data.message}`, "warning");
@@ -60,16 +62,25 @@ const FormInputBarang = () => {
     }
   };
 
+  const ubahGambar = (e) => {
+    setPhoto(e);
+    const objectUrl = URL.createObjectURL(e.target.files[0]);
+    setViewGambar(objectUrl);
+  }
+
   return (
     <Form onSubmit={handleSubmit}>
       <FormGroup>
+        <div>
+          <img style={{ width: '20%' }} src={viewGambar} alt={nama_barang} />
+        </div>
         <Form.Label htmlFor="photo">Gambar Barang</Form.Label>
         <Form.Control
           type="file"
           name="foto_barang"
           id="photo"
           required
-          onChange={(e) => setPhoto(e)}
+          onChange={(e) => ubahGambar(e)}
         />
       </FormGroup>
 
@@ -117,10 +128,10 @@ const FormInputBarang = () => {
           onChange={(e) => setStock(e.target.value)}
         />
       </FormGroup>
-     {
-      loading? <Button className='mt-3' type="button" color="primary" disabled>Loaing ..</Button>:
-      <Button className='mt-3' type="submit" color="primary">SIMPAN</Button>
-     }
+      {
+        loading ? <Button className='mt-3' type="button" color="primary" disabled>Loaing ..</Button> :
+          <Button className='mt-3' type="submit" color="primary">SIMPAN</Button>
+      }
     </Form>
   );
 };
