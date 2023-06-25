@@ -1,21 +1,19 @@
 import React, { useState } from 'react';
 import { useEffect } from 'react';
 import { FormGroup, Form, Button } from 'react-bootstrap';
-import { useParams } from 'react-router-dom';
 
-const FormUpdateBarang = () => {
-    const { id } = useParams();
+const FormUpdateBarang = ({ onHide, id , getdataupdate}) => {
     const [foto_barang, setPhoto] = useState('');
     const [nama_barang, setItemName] = useState('');
     const [harga_jual, setSellingPrice] = useState('');
     const [harga_beli, setPurchasePrice] = useState('');
     const [stok, setStock] = useState('');
     const [viewGambar, setViewGambar] = useState('');
-    const[loading , setLoading] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         getData()
-    }, [viewGambar]);
+    }, [viewGambar, id]);
 
     const getData = async () => {
         try {
@@ -27,7 +25,6 @@ const FormUpdateBarang = () => {
             setPurchasePrice(result.barang[0].harga_beli)
             setStock(result.barang[0].stok)
             setViewGambar(result.barang[0].foto_barang)
-
         } catch (e) {
             console.log(e)
         }
@@ -45,8 +42,8 @@ const FormUpdateBarang = () => {
             .split(".")
             .pop()
             .toLowerCase();
-        if (typeof foto_barang === 'object' && extName !== "jpg" && extName !== "png") {
-            swal("Gagal", "Extension file tidak di izinkan, pastikan extension JPG atau PNG", "warning");
+        if (typeof foto_barang === 'object' && extName !== "jpg" && extName !== "png" && extName !== "jpeg") {
+            swal("Gagal", "Extension file tidak di izinkan, pastikan extension JPG, JPEG atau PNG", "warning");
             return;
         }
         const formData = new FormData();
@@ -73,14 +70,19 @@ const FormUpdateBarang = () => {
             if (data.status === 200) {
                 swal("Berhasil", "Data Berhasil diupdate", "success");
                 setLoading(false);
-                const objectUrl = URL.createObjectURL(foto_barang.target.files[0]);
-                setViewGambar(objectUrl);
+                getdataupdate()
+                onHide()
+                if (typeof foto_barang === 'object') {
+                    const objectUrl = URL.createObjectURL(foto_barang?.target?.files[0]);
+                    setViewGambar(objectUrl);
+                }
             } else {
                 swal("Gagal", `Terjadi Kesalahan, ${data.message}`, "warning");
                 setLoading(false)
             }
 
         } catch (error) {
+            console.log(error)
             swal("Gagal", `Terjadi Kesalahan, Coba Beberapa Saat Lagi`, "error");
             setLoading(false)
         }
@@ -145,9 +147,9 @@ const FormUpdateBarang = () => {
                 />
             </FormGroup>
             {
-                loading?
-                <Button className='mt-3' type="button" color="primary" disabled>Loading...</Button>:
-                <Button className='mt-3' type="submit" color="primary">UPDATE</Button>
+                loading ?
+                    <Button className='mt-3' type="button" color="primary" disabled>Loading...</Button> :
+                    <Button className='mt-3' type="submit" color="primary">UPDATE</Button>
             }
         </Form>
     );

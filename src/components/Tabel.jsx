@@ -3,13 +3,19 @@ import { Table } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import swal from 'sweetalert';
 import ReactPaginate from 'react-paginate';
+import ModalUpdateBarang from './ModalUpdateBarang';
 
-const Tabel = ({getData, barang , setOffset , offset , remountComponent, setRemountComponent}) => {
+const Tabel = ({ getdata, barang, setOffset, offset, remountComponent, setRemountComponent }) => {
+  const [modalShowUpdate, setModalShowUpdate] = useState(false);
+  const [id , setId] = useState(null)
+
   // initial state pagination
   const [dataPagination, setDataPagination] = useState([])
   const [perPage] = useState(3)
   const [pageCount, setPageCount] = useState(0)
   const [loading, setLoading] = useState(false);
+
+
   //pagination function
   const pagination = () => {
     const slices = barang.slice(offset * perPage, offset * perPage + perPage);
@@ -28,9 +34,12 @@ const Tabel = ({getData, barang , setOffset , offset , remountComponent, setRemo
               <button className='btn btn-sm btn-danger m-1' disabled>Loading...</button> :
               <button onClick={() => actionDelete(item.id)} className='btn btn-sm btn-danger m-1'>delete</button>
           }
-          <Link to={`/barang/${item.id}`}>
-            <button className='btn btn-sm btn-success m-1'>update</button>
-          </Link>
+          {/* <Link to={`/barang/${item.id}`}> */}
+            <button onClick={() => {
+              setModalShowUpdate(true)
+              setId(item.id)
+            }} className='btn btn-sm btn-success m-1'>update</button>
+          {/* </Link> */}
         </td>
       </tr>
     ))
@@ -44,7 +53,7 @@ const Tabel = ({getData, barang , setOffset , offset , remountComponent, setRemo
   const actionDelete = (id) => {
     try {
       swal({
-        title: "Apakah kamu yaki?",
+        title: "Apakah kamu yakin?",
         text: "Data akan dihapus permanen!",
         icon: "warning",
         buttons: true,
@@ -62,7 +71,6 @@ const Tabel = ({getData, barang , setOffset , offset , remountComponent, setRemo
               setLoading(false);
               setRemountComponent(Math.random());
               setOffset(0)
-              // pagination(id)
               getData()
             } else {
               swal("Gagal", `${data.message}`, "success");
@@ -84,6 +92,12 @@ const Tabel = ({getData, barang , setOffset , offset , remountComponent, setRemo
 
   return (
     <>
+      <ModalUpdateBarang
+        id={id}
+        show={modalShowUpdate}
+        onHide={() => setModalShowUpdate(false)}
+        getdataupdate = {getdata}
+      />
       <Table responsive bordered hover striped>
         <thead>
           <tr>
@@ -103,26 +117,26 @@ const Tabel = ({getData, barang , setOffset , offset , remountComponent, setRemo
         </tbody>
       </Table>
       <div key={remountComponent}>
-      <ReactPaginate
-        previousLabel={"prev"}
-        previousClassName={"page-item"}
-        previousLinkClassName={"page-link"}
-        nextLabel={"next"}
-        nextClassName={"page-item"}
-        nextLinkClassName={"page-link"}
-        breakLabel={"..."}
-        breakClassName={"break-me page-item"}
-        breakLinkClassName={"page-link"}
-        pageCount={pageCount}
-        marginPagesDisplayed={2}
-        pageRangeDisplayed={5}
-        onPageChange={handlePageClick}
-        containerClassName={"pagination"}
-        subContainerClassName={"pages pagination"}
-        pageClassName={"page-item"}
-        pageLinkClassName={"page-link"}
-        activeClassName={"active"} />
-       </div>
+        <ReactPaginate
+          previousLabel={"prev"}
+          previousClassName={"page-item"}
+          previousLinkClassName={"page-link"}
+          nextLabel={"next"}
+          nextClassName={"page-item"}
+          nextLinkClassName={"page-link"}
+          breakLabel={"..."}
+          breakClassName={"break-me page-item"}
+          breakLinkClassName={"page-link"}
+          pageCount={pageCount}
+          marginPagesDisplayed={2}
+          pageRangeDisplayed={5}
+          onPageChange={handlePageClick}
+          containerClassName={"pagination"}
+          subContainerClassName={"pages pagination"}
+          pageClassName={"page-item"}
+          pageLinkClassName={"page-link"}
+          activeClassName={"active"} />
+      </div>
     </>
   );
 };

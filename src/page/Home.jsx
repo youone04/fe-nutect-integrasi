@@ -5,9 +5,10 @@ import MobileNavbar from "../components/MobileNavbar";
 import Sidebar from "../components/SideBar";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import ModalInputBarang from "../components/ModalInputBarang";
 
 const Home = () => {
-
+  const [modalShowInput, setModalShowInput] = useState(false);
   const [barang, setBarang] = useState({
     data: [],
     loading: true,
@@ -67,11 +68,19 @@ const Home = () => {
             </center> :
             <>
               <MobileNavbar />
+              <ModalInputBarang
+               getData={getData}
+               show={modalShowInput}
+               onHide={() => setModalShowInput(false)}/>
               <div className="container-fluid mt-3" style={{ marginBottom: 120 }}>
                 <div className="row content">
                   <Sidebar />
                   <br />
-                  <Dashboard barang={barang.data.barang} setBarang={setBarang} getData={getData} />
+                  <Dashboard 
+                  setModalShowInput = {setModalShowInput}
+                  barang={barang.data.barang} 
+                  setBarang={setBarang} 
+                  getdata={getData} />
                 </div>
               </div>
               <Footer />

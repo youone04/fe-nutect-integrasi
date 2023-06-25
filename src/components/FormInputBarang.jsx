@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { FormGroup, Form, Button } from 'react-bootstrap';
 import swal from 'sweetalert';
-const FormInputBarang = () => {
+const FormInputBarang = ({getData, onHide}) => {
   const [foto_barang, setPhoto] = useState('');
   const [nama_barang, setItemName] = useState('');
   const [harga_jual, setSellingPrice] = useState('');
@@ -22,8 +22,8 @@ const FormInputBarang = () => {
       .split(".")
       .pop()
       .toLowerCase();
-    if (extName !== "jpg" && extName && extName !== "png") {
-      swal("Gagal", "Extension file tidak di izinkan, pastikan extension JPG atau PNG", "warning");
+    if (extName !== "jpg" && extName && extName !== "png" && extName !== "jpeg") {
+      swal("Gagal", "Extension file tidak di izinkan, pastikan extension JPG, JPEG atau PNG", "warning");
       return;
     }
 
@@ -43,7 +43,9 @@ const FormInputBarang = () => {
 
       const data = await hasil.json();
       if (data.status === 200) {
+        onHide();
         swal("Berhasil", "Data Berhasil ditamahkan", "success");
+        getData();
         setPhoto('');
         setItemName('')
         setPurchasePrice('')
@@ -118,7 +120,7 @@ const FormInputBarang = () => {
         />
       </FormGroup>
       <FormGroup>
-        <Form.Label htmlFor="stock">Stock</Form.Label>
+        <Form.Label htmlFor="stock">Stok</Form.Label>
         <Form.Control
           type="number"
           required

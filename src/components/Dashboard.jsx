@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { useState } from "react";
 import { useEffect } from "react";
 
-const DashboardComp = ({ barang, getData }) => {
+const DashboardComp = ({ barang, getdata, setModalShowInput }) => {
   const [textSearch, setTextSearch] = useState('');
   const [dataSearch , setDataSearch] = useState(barang)
   const [offset, setOffset] = useState(0);
@@ -26,13 +26,15 @@ const DashboardComp = ({ barang, getData }) => {
           <h1>Data Barang</h1>
           <hr />
           <div className="mt-3 mb-3 d-lg-flex justify-content-between">
-            <Link to={'/barang'}><button className="btn btn-primary m-3">Tambah Barang +</button></Link>
+            {/* <Link to={'/barang'}> */}
+              <button onClick={() => setModalShowInput(true)} className="btn btn-primary m-3">Tambah Barang +</button>
+              {/* </Link> */}
             <Form.Group className="mb-3 m-3" controlId="exampleForm.ControlInput1">
               <Form.Control onChange={e => setTextSearch(e.target.value)} type="text" placeholder="Search" />
             </Form.Group>
           </div>
           <Tabel 
-          getData={getData}
+          getdata={getdata}
           setDataSearch={setDataSearch}
           remountComponent={remountComponent}
           setRemountComponent={setRemountComponent}
