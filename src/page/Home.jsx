@@ -6,6 +6,7 @@ import Sidebar from "../components/SideBar";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import ModalInputBarang from "../components/ModalInputBarang";
+import SpinnerComp from "../components/SpinnerComp";
 
 const Home = () => {
   const [modalShowInput, setModalShowInput] = useState(false);
@@ -64,7 +65,7 @@ const Home = () => {
           <p className="text-danger">Server Error!</p> :
           barang.loading ?
             <center>
-              <p>Loading ...</p>
+              <SpinnerComp/>
             </center> :
             <>
               <MobileNavbar />
