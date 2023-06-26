@@ -25,8 +25,8 @@ const Tabel = ({ getdata, barang, setOffset, offset, remountComponent, setRemoun
         <th className="text-center" scope="row">{i++}</th>
         <td className="text-center" style={{ width: '20%' }}><img style={{ width: '100%' }} src={`${item.foto_barang}`} alt={item.nama_barang} /></td>
         <td className="text-center">{item.nama_barang}</td>
-        <td className="text-center">{item.harga_jual}</td>
         <td className="text-center">{item.harga_beli}</td>
+        <td className="text-center">{item.harga_jual}</td>
         <td className="text-center">{item.stok}</td>
         <td className="text-center">
           {
