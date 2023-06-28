@@ -71,7 +71,7 @@ const Tabel = ({ getdata, barang, setOffset, offset, remountComponent, setRemoun
               setLoading(false);
               setRemountComponent(Math.random());
               setOffset(0)
-              getData()
+              getdata()
             } else {
               swal("Gagal", `${data.message}`, "success");
               setLoading(false)
